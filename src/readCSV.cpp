@@ -11,7 +11,6 @@ std::vector<double> readCSV(const std::string& filepath)
     std::vector<double> data; 
     std::ifstream file(filepath);
     std::string line;
-    ifstream file(filepath);
 
     if (! file.is_open()){
         cerr << "Error opening file!" << endl;
@@ -23,9 +22,9 @@ std::vector<double> readCSV(const std::string& filepath)
         stringstream ss(line);
         string cell; 
         int col = 0;
-        while(std::getline(ss, cell, ",")) {
-            data.push_back(std::stod(cell))
-        }
+        while(std::getline(ss, cell, ',')) {
+            data.push_back(std::stod(cell));
+        };
     }
 
     file.close();

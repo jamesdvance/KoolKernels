@@ -19,8 +19,8 @@ __global__ void vecAdd(float* A, float* B, float* C, int n){
 
 
 int main(){
-    std::string file1 = "data/df1_100.csv";
-    std::string file2 = "data/df2_100.csv";
+    std::string file1 = "data/df_1_x_100_int.csv";
+    std::string file2 = "data/df_1_x_100_int.csv";
 
     std::vector<double> h_vector1 = readCSV(file1);
     std::vector<double> h_vector2 = readCSV(file2);
