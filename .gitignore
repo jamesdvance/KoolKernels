@@ -1,2 +1,3 @@
 .claude
 src/build
+cuda_torch_env

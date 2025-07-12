@@ -39,5 +39,9 @@ int main(){
     int threadsPerBlock = 1024;
     int blocksPerGrid = (numElements + threadsPerBlock -1)/ threadsPerBlock;
     vecAdd<<<blocksPerGrid, threadsPerBlock>>>(d_vector1, d_vector2, d_result, numElements);
-    
+    std::out << "Vector Addition Completed Successfully" << std::endl;
+    // TODO - add memC
+    std::vector<float> output_vector(numElements);
+    cudaMemcpy(output_vector.data(), d_result, size, cudaMemcpyDeviceToHost);
+
 }
