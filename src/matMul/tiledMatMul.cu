@@ -6,30 +6,46 @@
 // tiled matmul
 __global__ void tiledMatMul(float* A, float* B, float* C, int widthA, int heightA, int widthB) {
 
-    __shared__ float tileA; //trying as row-major. Would be TILE_WIDTH * TILE_WIDTH
-    __shared__ float tileB; 
+    // Using T as a placeholder for specific type so we can handle float, double or __half
+    // We can specify the type when launching the kernel like tiledMatMul<float><<<grid_dim, block_dim>>>()
+    
+    __shared__ T tileA[TILE_WIDTH][TILE_WIDTH]; 
+    __shared__ T tileB[TILE_WIDTH][TILE_WIDTH]; 
 
     int tx = threadIdx.x;
     int ty = threadIdx.y;
+    int bx = blockIdx.x;
+    int by = blockIdx.y;
+
+    // global row / col
+    int row = blockIdx.y * blockDim.y + threadIdx.y;
+    int col = blockIdx.x * blockDim.x + threadIdx.x; 
 
     // global row and column output of C to load into memory
     // 
-    int rowC = blockIdx.y * TILE_WIDTH + blockIdx.y; 
-    int colC = blockIdx.x * TILE_WIDTH + blockIdx.x; 
+    int rowC = blockIdx.y * TILE_WIDTH + threadIdx.y; 
+    int colC = blockIdx.x * TILE_WIDTH + threadIdx.x; 
 
     // we iterate over how many N tiles it takes to cover the common dimension. CAlling the iterator ph for 'phase'
-    for (int ph = 0; ph < TILE_WIDTH/widthA, ph++){
+    for (int ph = 0; ph <  widthA/TILE_WIDTH, ph++){
         
         // Check if we should load into tileA for this phase
         // Check conditions - 
-        if (ph * TILE_WIDTH < widthA  ){
-            tileA[TILE_WIDTH] = A[ph*TILE_WIDTH * ty ];
+        if ((ph * TILE_WIDTH * ty < widthA ) & ()){
+            // index at 
+            tileA[ty][tx] = A[TILE_WIDTH * ph*ty + tx ]
 
         } else{
-            tileA[tx*ty] = 0f;
+            tileB[ty][tx] = 0f;
         }
 
+        if((ph*TILE_WIDTH <)){
 
+        }else{
+            tileB[ty][tx] = 0f;
+        }
+
+        __syncthreads();
 
 
     }
